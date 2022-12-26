@@ -1,16 +1,22 @@
 const express = require("express");
 const products = require("./data");
 
+
 const app = express();
 // app.use(express.static("public"))
 
-app.get("/", (req, res) => {
-    const partialProducts = products.map((result) => {
-        const {name, image, id} = result
-        return {name, id, image}
-    })
-    
-    res.json(partialProducts)
+app.get("/api/products/:productId", (req, res) => {
+    const productId = Number(req.params.productId)
+    const finded = products.find(
+        (result) => result.id === productId)
+
+    if (!finded) {
+        return res.status(404).send("product does not exist")
+    }
+
+    return res.json(finded)
+
+
 })
 
 app.listen(3000, () => {
