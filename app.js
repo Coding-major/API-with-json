@@ -2,55 +2,32 @@ const express = require("express");
 const products = require("./data");
 
 
-const app = express();
+const app = express();   
+
 // app.use(express.static("public"))
-app.get("/api/products", (req, res) => {
-    const productsDetails = products.map((result) => {
-        const {name, id, image} = result;
-        return {id, name, image}
-    })
+const logger = (req, res, next) => {
+    const method = req.method
+    const url = req.url
+    const time = new Date().getFullYear();
+    console.log(method, url, time);
+    next()
+}
 
-    res.json(productsDetails)
+
+app.get("/", logger, (req, res) => {
+    res.send("Home")
 })
 
-app.get("/", (req, res) => {
-    res.send('<h1> Home page</h1><a href="/api/products">products</a>')
-})
-app.get("/api/products/:productId", (req, res) => {
-    const productId = Number(req.params.productId)
-    const finded = products.find(
-        (result) => result.id === productId)
-
-    if (!finded) {
-        return res.status(404).send("product does not exist")
-    }
-
-    return res.json(finded)
-    console.log(req.params);
+app.get("/about", logger, (req, res) => {
+    res.send("About")
 })
 
-app.get("/api/products/:productId/review/:reviewId", (req, res) => {
-    res.send("hello world")
+app.get("/api/products", logger, (req, res) => {
+    res.send('products')
 })
 
-app.get("/api/v1/query", function(req, res) {
-    const {search, limit} = req.query
-    let sortedProducts = [...products]
-    
-    if (search) {
-        sortedProducts = sortedProducts.filter((result) => {
-            return result.name.startsWith(search)
-        })
-    }
-
-    if (limit) {
-        sortedProducts = sortedProducts.slice(0, Number(limit))
-    }
-
-    if (sortedProducts.length<1) {
-        return res.status(200).send("No products matches your search")
-    }
-    res.status(200).json(sortedProducts)
+app.get("/api/items", logger, (req, res) => {
+    res.send("items  ")
 })
 
 
