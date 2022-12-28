@@ -3,23 +3,24 @@ const products = require("./data");
 const logger = require("./logger")
 
 
-const app = express();   
+const app = express(); 
+app.use(logger)  
 
 // app.use(express.static("public"))
 
-app.get("/", logger, (req, res) => {
+app.get("/", (req, res) => {
     res.send("Home")
 })
 
-app.get("/about", logger, (req, res) => {
+app.get("/about", (req, res) => {
     res.send("About")
 })
 
-app.get("/api/products", logger, (req, res) => {
+app.get("/api/products", (req, res) => {
     res.send('products')
 })
 
-app.get("/api/items", logger, (req, res) => {
+app.get("/api/items", (req, res) => {
     res.send("items  ")
 })
 
